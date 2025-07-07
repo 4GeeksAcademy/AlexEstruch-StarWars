@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { HeartButton } from "./HeartButton";
 
-export const Card = ({ url, title, description }) => {
+export const Card = ({ id, url, title, description, type }) => {
 
     return (
-        <div class="card" style="width: 400px;">
-            <img src={url} class="card-img-top" alt="card" style={{ width: "400px", height: "200px", objectFit: "cover" }}/>
-            <div class="card-body">
-                <h5 class="card-title">{title}</h5>
-                <p class="card-text">{description}</p>
+        <div className="card" style={{width: "400px"}}>
+            <img src={url} className="card-img-top" alt="card" style={{ width: "400px", height: "200px", objectFit: "cover" }}/>
+            <div className="card-body">
+                <h5 className="card-title">{title}</h5>
+                <p className="card-text">{description}</p>
 
                 <div className="d-flex justify-content-between">
-                    <button type="button" class="btn btn-outline-primary">Primary</button>
-                    <HeartButton />
+                    <Link to={`single/${id}`} className="btn btn-outline-primary">
+                        Learn More!
+                    </Link>
+                    <HeartButton id={id} title={title} url={url} type={type} />
                 </div>
             </div>
         </div>

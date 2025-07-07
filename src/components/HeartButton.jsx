@@ -1,16 +1,24 @@
-import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useContext } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
-export const HeartButton = () => {
-    const [liked, setLiked] = useState(false);
+export const HeartButton = ({ id, title, url, type }) => {
+    const { store, dispatch } = useGlobalReducer();
 
-    const toggleLike = () => {
-        setLiked(!liked);
+    const isFavorite = store.favorites.some(
+        (fav) => fav.id === id && fav.type === type
+    );
+
+    const toggleFavorite = () => {
+        if (isFavorite) {
+            dispatch.removeFavorite(id, type);
+        } else {
+            dispatch.addFavorite({ id, title, url, type });
+        }
     };
 
     return (
         <button
-            onclick={toggleLike}
+            onClick={toggleFavorite}
             style={{
                 width: "40px",
                 height: "40px",
@@ -24,10 +32,10 @@ export const HeartButton = () => {
                 padding: 0,
                 outline: "none",
             }}
-            aria-label={liked ? "Unlike" : "Like"}
+            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
             <i
-                className={liked ? "fas fa-heart" : "far fa-heart"}
+                className={isFavorite ? "fas fa-heart" : "far fa-heart"}
                 style={{
                     color: "#ffc107",
                     fontSize: "22px",

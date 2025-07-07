@@ -4,7 +4,7 @@ export const initialStore = () => {
     vehicles: [],
     planets: [],
     favorites: [],
-    message: null,
+    //message: null,
   }
 }
 
