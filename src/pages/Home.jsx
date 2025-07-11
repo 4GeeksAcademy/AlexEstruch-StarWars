@@ -6,70 +6,46 @@ export const Home = () => {
 	const { store, dispatch } = useGlobalReducer();
 
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchCategory = async (category, type) => {
 			try {
-				// personajes
-				const resPeople = await fetch("https://www.swapi.tech/api/people");
-				const dataPeople = await resPeople.json();
-				const peopleDetails = [];
+				const res = await fetch(`https://www.swapi.tech/api/${category}`);
+				const data = await res.json();
 
-				for (const item of dataPeople.results) {
-					const res = await fetch(item.url);
-					const data = await res.json();
-					const props = data.result.properties;
-					peopleDetails.push({
-						uid: data.result.uid,
-						name: props.name,
-						description: `Gender: ${props.gender}, Hair: ${props.hair_color}, Eyes: ${props.eye_color}`
-					});
-				}
-				dispatch({ type: "load_characters", payload: peopleDetails });
+				// Segundo fetch para cada item (detalles)
+				const detailedItems = await Promise.all(
+					data.results.map(async (item) => {
+						try {
+							const detailRes = await fetch(item.url);
+							const detailData = await detailRes.json();
+							return {
+								uid: item.uid,
+								name: item.name,
+								description: detailData.result.description,
+								properties: detailData.result.properties,
+							};
+						} catch (err) {
+							console.error(`Error fetching detail for ${item.name}:`, err);
+							return {
+								uid: item.uid,
+								name: item.name,
+								description: "Description not available.",
+								properties: {},
+							};
+						}
+					})
+				);
 
-				// vehiculos
-				const resVehicles = await fetch("https://www.swapi.tech/api/vehicles");
-				const dataVehicles = await resVehicles.json();
-				const vehiclesDetails = [];
-
-				for (const item of dataVehicles.results) {
-					const res = await fetch(item.url);
-					const data = await res.json();
-					const props = data.result.properties;
-					vehiclesDetails.push({
-						uid: data.result.uid,
-						name: props.name,
-						description: `Model: ${props.model}, Passengers: ${props.passengers}`
-					});
-				}
-				dispatch({ type: "load_vehicles", payload: vehiclesDetails });
-
-				// planetas
-				const resPlanets = await fetch("https://www.swapi.tech/api/planets");
-				const dataPlanets = await resPlanets.json();
-				const planetsDetails = [];
-
-				for (const item of dataPlanets.results) {
-					const res = await fetch(item.url);
-					const data = await res.json();
-					const props = data.result.properties;
-					planetsDetails.push({
-						uid: data.result.uid,
-						name: props.name,
-						description: `Population: ${props.population}, Terrain: ${props.terrain}`
-					});
-				}
-				dispatch({ type: "load_planets", payload: planetsDetails });
-
+				dispatch({ type, payload: detailedItems });
 			} catch (error) {
-				console.error("Error al cargar datos:", error);
+				console.error(`Error fetching ${category}:`, error);
 			}
 		};
 
-		fetchData();
+		fetchCategory("people", "load_characters");
+		fetchCategory("vehicles", "load_vehicles");
+		fetchCategory("planets", "load_planets");
 	}, [dispatch]);
-	console.log("characters:", store.characters);
-	console.log("vehicles:", store.vehicles);
-	console.log("planets:", store.planets);
-	console.log("STORE COMPLETO:", store);
+
 	return (
 		<div className="text m-3 mt-5">
 			<h1 className="text-danger">Characters</h1>
@@ -85,8 +61,8 @@ export const Home = () => {
 					/>
 				))}
 			</div>
-			
-			<h1 className="text-danger">Vehiculos</h1>
+
+			<h1 className="text-danger">Vehículos</h1>
 			<div className="d-flex overflow-auto gap-3 py-2" style={{ flexWrap: "nowrap" }}>
 				{store.vehicles?.map(vehicle => (
 					<Card
@@ -99,9 +75,9 @@ export const Home = () => {
 					/>
 				))}
 			</div>
-			
+
 			<h1 className="text-danger">Planetas</h1>
-			<div className="d-flex flex-row overflow-auto gap-3 py-2" style={{ flexWrap: "nowrap" }}>
+			<div className="d-flex overflow-auto gap-3 py-2" style={{ flexWrap: "nowrap" }}>
 				{store.planets?.map(planet => (
 					<Card
 						key={planet.uid}

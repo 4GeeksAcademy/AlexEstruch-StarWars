@@ -10,9 +10,11 @@ export const HeartButton = ({ id, title, url, type }) => {
 
     const toggleFavorite = () => {
         if (isFavorite) {
-            dispatch.removeFavorite(id, type);
+            dispatch({type: "remove_favorite", payload: { id, type }
+            });
         } else {
-            dispatch.addFavorite({ id, title, url, type });
+            dispatch({type: "add_favorite", payload: { id, title, url, type }
+            });
         }
     };
 
