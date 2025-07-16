@@ -27,7 +27,8 @@ export const Single = () => {
     );
   }
 
-  const imageUrl = `https://starwars-visualguide.com/assets/img/${type}s/${theId}.jpg`;
+  const imageUrl = `https://raw.githubusercontent.com/tbone849/star-wars-guide/refs/heads/master/build/assets/img/${type}s/${theId}.jpg`;
+  
 
   // Campos clave para mostrar, adaptados según tipo
   // Esto depende de las propiedades que tengas en tu objeto singleItem.properties

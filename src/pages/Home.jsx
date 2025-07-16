@@ -57,7 +57,7 @@ export const Home = () => {
 						title={character.name}
 						description={character.description}
 						type="character"
-						url={`https://starwars-visualguide.com/assets/img/characters/${character.uid}.jpg`}
+						url={`https://raw.githubusercontent.com/tbone849/star-wars-guide/refs/heads/master/build/assets/img/characters/${character.uid}.jpg`}
 					/>
 				))}
 			</div>
@@ -71,7 +71,7 @@ export const Home = () => {
 						title={vehicle.name}
 						description={vehicle.description}
 						type="vehicle"
-						url={`https://starwars-visualguide.com/assets/img/vehicles/${vehicle.uid}.jpg`}
+						url={`https://raw.githubusercontent.com/tbone849/star-wars-guide/refs/heads/master/build/assets/img/characters/${vehicle.uid}.jpg`}
 					/>
 				))}
 			</div>
@@ -85,7 +85,7 @@ export const Home = () => {
 						title={planet.name}
 						description={planet.description}
 						type="planet"
-						url={`https://starwars-visualguide.com/assets/img/planets/${planet.uid}.jpg`}
+						url={`https://raw.githubusercontent.com/tbone849/star-wars-guide/refs/heads/master/build/assets/img/characters/${planet.uid}.jpg`}
 					/>
 				))}
 			</div>
